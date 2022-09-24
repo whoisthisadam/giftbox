@@ -1,7 +1,6 @@
 package by.bsuir.gift;
 
 
-import by.bsuir.Multiplicate;
 import by.bsuir.candies.Candies;
 import by.bsuir.candies.Chocolate;
 import by.bsuir.candies.Cookies;
@@ -29,8 +28,6 @@ public class GiftBox implements GiftBoxOptions{
         System.out.println("Here is your list:");
         System.out.println(list);
         System.out.println("Sum of weight:"+giftBox.calculateWeight(list));
-        Multiplicate multiplicate=(x,y)->x*y;
-        System.out.println(multiplicate.multiplicate(3,4));
         return list;
     }
 
