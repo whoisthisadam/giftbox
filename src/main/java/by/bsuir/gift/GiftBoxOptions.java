@@ -8,7 +8,7 @@ public interface GiftBoxOptions {
 
     Double calculateWeight(List<Candies>list);
 
-    List<Candies>filterMoreThanAvgWeight(List<Candies> list);
+    List<Candies> filtersAndSort(List<Candies> list, boolean isSorted, boolean isFiltered);
 
     Double calculateAverageWeight(List<Candies>list);
 
