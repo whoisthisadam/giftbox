@@ -8,4 +8,6 @@ public interface GiftBoxOptions {
 
     Double calculateWeight(List<Candies>list);
 
+    Double calculateAvgWeight(List<Candies> list);
+
 }

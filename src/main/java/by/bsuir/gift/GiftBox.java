@@ -32,6 +32,10 @@ public class GiftBox implements GiftBoxOptions{
     }
 
 
+    @Override
+    public Double calculateAvgWeight(List<Candies>list){
+        return calculateWeight(list)/ list.size();
+    }
 
 
 
