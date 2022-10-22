@@ -2,16 +2,16 @@ package by.bsuir.gift;
 
 
 import by.bsuir.NewThread;
-import by.bsuir.candies.Candies;
-import by.bsuir.candies.Chocolate;
-import by.bsuir.candies.Cookies;
-import by.bsuir.candies.Marshmallow;
+import by.bsuir.ThreadOne;
+import by.bsuir.ThreadTwo;
+import by.bsuir.candies.*;
 import by.bsuir.enums.ChocoTypes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Data
@@ -38,6 +38,7 @@ public class GiftBox implements GiftBoxOptions{
                 6-Sort by cost ASC in new thread
                 7-Sort by weight DSC in new thread
                 """;
+        List<Candies>startList=new ArrayList<>(list);
         Scanner scanner=new Scanner(System.in);
         boolean exit=false;
         boolean isFilteredByCost=false;
@@ -50,27 +51,37 @@ public class GiftBox implements GiftBoxOptions{
                     exit=true;
                 case "1"->{
                     isFilteredByWeight=true;
-                    System.out.println("Filtered list:\n"+ filters(list, isFilteredByCost, isFilteredByWeight));
+                    System.out.println("Filtered list:\n"+ filters(startList, isFilteredByCost, isFilteredByWeight));
+                    System.out.println("Weight of gift:"+calculateWeight(filters(startList,isFilteredByCost,isFilteredByWeight)));
+                    list=filters(startList,isFilteredByCost,isFilteredByWeight);
                 }
                 case "2"->{
                     isFilteredByWeight=false;
-                    System.out.println("Unfiltered list:\n"+ filters(list, isFilteredByCost, isFilteredByWeight));
+                    System.out.println("Unfiltered list:\n"+ filters(startList, isFilteredByCost, isFilteredByWeight));
+                    System.out.println("Weight of gift:"+calculateWeight(filters(startList,isFilteredByCost,isFilteredByWeight)));
+                    list=filters(startList,isFilteredByCost,isFilteredByWeight);
                 }
                 case "3"->{
                     isFilteredByCost=true;
-                    System.out.println("Sorted list:\n"+ filters(list,isFilteredByCost,isFilteredByWeight));
+                    System.out.println("Sorted list:\n"+ filters(startList,isFilteredByCost,isFilteredByWeight));
+                    System.out.println("Weight of gift:"+calculateWeight(filters(startList,isFilteredByCost,isFilteredByWeight)));
+                    list=filters(startList,isFilteredByCost,isFilteredByWeight);
                 }
                 case "4"->{
                     isFilteredByCost=false;
-                    System.out.println("Unsorted list:\n"+ filters(list,isFilteredByCost,isFilteredByWeight));
+                    System.out.println("Unsorted list:\n"+ filters(startList,isFilteredByCost,isFilteredByWeight));
+                    System.out.println("Weight of gift:"+calculateWeight(filters(startList,isFilteredByCost,isFilteredByWeight)));
+                    list=filters(startList,isFilteredByCost,isFilteredByWeight);
                 }
                 case "5"->{
                     System.out.println("List:\n"+list);
+                    System.out.println("Weight of gift:"+calculateWeight(startList));
                 }
                 case "6"->{
+                    AtomicReference<List<Candies>> finalList = new AtomicReference<>(list);
                     Runnable n=()->{
-                        list.sort(Comparator.comparing(Candies::getCost));
-                        System.out.println("List:"+list);
+                        finalList.set(finalList.get().stream().sorted(Comparator.comparing(Candies::getCost)).toList());
+                        System.out.println("List:"+ finalList);
                     };
                     new Thread(n).start();
                 }
@@ -102,8 +113,10 @@ public class GiftBox implements GiftBoxOptions{
                     (finalList1.stream().map(Candies::getCost).reduce(0L,Long::sum))/finalList1.size()).toList();
         }
         List<Candies> finalList = list;
-        if(isFilteredByWeight)return list.stream().filter(x->x.getWeight()>=calculateAverageWeight(finalList)).toList();
-        else return list;
+        if(isFilteredByWeight){
+            list= list.stream().filter(x->x.getWeight()>=calculateAverageWeight(finalList)).toList();
+        }
+        return list;
     }
 
     @Override
@@ -119,6 +132,14 @@ public class GiftBox implements GiftBoxOptions{
         list.add(new Marshmallow("BonPari",RandomUtils.nextLong(1L,1000L),RandomUtils.nextDouble(1.0,100.0),"Marshmallow", "Strawberry"));
         list.add(new Cookies("ChocoPie",RandomUtils.nextLong(1L,1000L),RandomUtils.nextDouble(1.0,100.0),"Cookies",RandomUtils.nextLong(1L,50L)));
         list.add(new Chocolate("Milka", RandomUtils.nextLong(1L, 1000L),RandomUtils.nextDouble(1.0,300.0),"Chocolate", ChocoTypes.DARK));
+        list.add(new Marshmallow("abvgd", 10L, 80.0, "Marshmallow", "Blueberry"));
         return list;
+    }
+
+    public static void task(){
+        Runnable r=new ThreadOne();
+        new Thread(r).start();
+        Thread th=new ThreadTwo();
+        th.start();
     }
 }

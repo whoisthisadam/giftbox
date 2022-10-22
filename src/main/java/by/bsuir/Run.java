@@ -2,8 +2,9 @@ package by.bsuir;
 
 import by.bsuir.gift.GiftBox;
 
-public class run {
+public class Run {
     public static void main(String[] args) {
-        GiftBox.createBox();
+//        GiftBox.createBox();
+        GiftBox.task();
     }
 }

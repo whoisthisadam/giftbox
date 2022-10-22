@@ -18,6 +18,7 @@ public class NewThread extends Thread{
 
 
     public void run(){
+
         list=list.stream().sorted(Comparator.comparing(Candies::getWeight).reversed()).toList();
         System.out.println(list);
 
