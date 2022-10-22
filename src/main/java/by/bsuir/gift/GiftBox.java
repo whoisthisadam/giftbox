@@ -2,7 +2,6 @@ package by.bsuir.gift;
 
 
 import by.bsuir.NewThread;
-import by.bsuir.Run;
 import by.bsuir.candies.Candies;
 import by.bsuir.candies.Chocolate;
 import by.bsuir.candies.Cookies;
@@ -79,7 +78,7 @@ public class GiftBox implements GiftBoxOptions{
                     new NewThread(list).start();
                 }
                 default -> {
-                    System.err.println("ERROR!\nYou are to choose numbers[0,1,2,3,4,5].\nTry again");
+                    System.err.println("ERROR!\nYou are to choose numbers[0,1,2,3,4,5,6,7].\nTry again");
                 }
             }
         }
