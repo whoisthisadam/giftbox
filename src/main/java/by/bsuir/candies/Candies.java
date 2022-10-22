@@ -17,4 +17,13 @@ public class Candies {
     String type;
 
 
+    @Override
+    public String toString() {
+        return "\nCandies{" +
+                "name=" + name +"\n"+
+                "cost=" + cost +"\n"+
+                "weight=" + weight +"\n"+
+                "type=" + type +"\n"+
+                '}';
+    }
 }

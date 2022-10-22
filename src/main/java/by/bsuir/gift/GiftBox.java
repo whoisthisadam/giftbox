@@ -1,6 +1,8 @@
 package by.bsuir.gift;
 
 
+import by.bsuir.NewThread;
+import by.bsuir.Run;
 import by.bsuir.candies.Candies;
 import by.bsuir.candies.Chocolate;
 import by.bsuir.candies.Cookies;
@@ -31,9 +33,11 @@ public class GiftBox implements GiftBoxOptions{
                 0-FINISH
                 1-Filter elements which weight is more than average(filter 1)
                 2-Undo filter No 1
-                3-Sort by cost
-                4-Undo sorting
-                5-Undo all
+                3-Filter by cost
+                4-Undo filter No 2
+                5-Undo all filters
+                6-Sort by cost ASC in new thread
+                7-Sort by weight DSC in new thread
                 """;
         Scanner scanner=new Scanner(System.in);
         boolean exit=false;
@@ -64,6 +68,16 @@ public class GiftBox implements GiftBoxOptions{
                 case "5"->{
                     System.out.println("List:\n"+list);
                 }
+                case "6"->{
+                    Runnable n=()->{
+                        list.sort(Comparator.comparing(Candies::getCost));
+                        System.out.println("List:"+list);
+                    };
+                    new Thread(n).start();
+                }
+                case "7"->{
+                    new NewThread(list).start();
+                }
                 default -> {
                     System.err.println("ERROR!\nYou are to choose numbers[0,1,2,3,4,5].\nTry again");
                 }
@@ -85,7 +99,7 @@ public class GiftBox implements GiftBoxOptions{
     public List<Candies> filters(List<Candies> list, boolean isFilteredByCost, boolean isFilteredByWeight) {
         if(isFilteredByCost) {
             List<Candies> finalList1 = list;
-            list=list.stream().filter(x->x.getCost()>
+            list=list.stream().filter(x->x.getCost()<
                     (finalList1.stream().map(Candies::getCost).reduce(0L,Long::sum))/finalList1.size()).toList();
         }
         List<Candies> finalList = list;
